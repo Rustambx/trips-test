@@ -1,0 +1,94 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Car API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/get/cars": {
+            "post": {
+                "tags": [
+                    "Cars"
+                ],
+                "summary": "Get available cars",
+                "operationId": "823b6bbaa8bd8d72cbcfa108c8dce954",
+                "requestBody": {
+                    "description": "Request data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "employee_id",
+                                    "start_time",
+                                    "end_time"
+                                ],
+                                "properties": {
+                                    "employee_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "start_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-05-28 09:00:00"
+                                    },
+                                    "end_time": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-05-28 17:00:00"
+                                    },
+                                    "model": {
+                                        "type": "string",
+                                        "example": "ModelX"
+                                    },
+                                    "category": {
+                                        "type": "string",
+                                        "example": "Luxury"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "Car ID",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Car name",
+                                                "type": "string"
+                                            },
+                                            "model": {
+                                                "description": "Car model",
+                                                "type": "string"
+                                            },
+                                            "category": {
+                                                "description": "Car category",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        }
+    }
+}

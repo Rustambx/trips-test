@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+    only-mysql:
+        build: docker/mysql
+        container_name: only-mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: only_db
+        volumes:
+            - ./docker/mysql/data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+
+    only-php:
+        build:
+            context: .
+            dockerfile: ./docker/php/Dockerfile
+        container_name: only-php
+        restart: unless-stopped
+        volumes:
+            - .:/var/www
+        working_dir: /var/www
+        depends_on:
+            - only-mysql
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: only-mysql
+            DB_PORT: 3306
+            DB_DATABASE: only_db
+            DB_USERNAME: root
+            DB_PASSWORD: root
+        command: sh -c "cp .env.example .env && composer install && php artisan key:generate && php artisan migrate && php artisan l5-swagger:generate && php-fpm"
+
+    only-nginx:
+        build:
+            dockerfile: ./docker/nginx/Dockerfile
+        container_name: only-nginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www
+        depends_on:
+            - only-php
